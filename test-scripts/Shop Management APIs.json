@@ -1,0 +1,262 @@
+{
+	"info": {
+		"_postman_id": "6c09f9b9-fd8a-429a-9de2-71bf52ae87e7",
+		"name": "Shop Management API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "34841042"
+	},
+	"item": [
+		{
+			"name": "Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"const jsonData = pm.response.json();",
+							"pm.environment.set(\"authToken\", jsonData.token);",
+							"pm.test(\"Token saved as environment variable\", function () {",
+							"    pm.expect(pm.environment.get(\"authToken\")).to.not.be.null;",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"admin@coffeeshop.com\",\n    // \"username\": \"op1\",\n    // \"username\": \"840987654321\",\n    \"password\": \"admin123\"\n    // \"password\": \"1234@Abc\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/auth/login",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Shop",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"Response contains shop details\", function () {",
+							"    const jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property(\"id\");",
+							"    pm.expect(jsonData).to.have.property(\"name\");",
+							"",
+							"    pm.environment.set(\"shopId\", jsonData.id);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{authToken}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\": \"My Coffee Shop 2\",\n  \"address\": \"124 Coffee St\",\n  \"phone\": \"123-456-7890\",\n  \"latitude\": 40.712776,\n  \"longitude\": -74.005974,\n  \"maxQueueSize\": 10,\n  \"numberOfQueues\": 2,\n  \"openingDayOfWeek\": 7,\n  \"openingTime\": \"08:00:00\",\n  \"closingTime\": \"20:00:00\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/shops",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"shops"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Shop",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Shop details are updated\", function () {",
+							"    const jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property(\"name\", \"Updated Coffee Shop\");",
+							"    pm.expect(jsonData).to.have.property(\"phone\", \"098-765-4321\");",
+							"    pm.expect(jsonData).to.have.property(\"maxQueueSize\", 15);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{authToken}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\": \"Updated Coffee Shop\",\n  \"phone\": \"098-765-4321\",\n  \"maxQueueSize\": 15\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/shops/{{shopId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"shops",
+						"{{shopId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Shop by ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Shop details are correct\", function () {",
+							"    const jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property(\"id\", \"{{shopId}}\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{authToken}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/shops/{{shopId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"shops",
+						"{{shopId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Shops",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response contains shops\", function () {",
+							"    const jsonData = pm.response.json();",
+							"    pm.expect(jsonData.content).to.be.an(\"array\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{authToken}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/shops",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"shops"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8080/api/v1"
+		},
+		{
+			"key": "authToken",
+			"value": ""
+		},
+		{
+			"key": "shopId",
+			"value": ""
+		}
+	]
+}

@@ -85,6 +85,21 @@ databaseChangeLog:
                   name: created_at
                   type: timestamp
                   defaultValueComputed: CURRENT_TIMESTAMP
+              - column:
+                  name: opening_day_of_week
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: opening_time
+                  type: time
+                  constraints:
+                    nullable: false
+              - column:
+                  name: closing_time
+                  type: time
+                  constraints:
+                    nullable: false
 
   - changeSet:
       id: 003-create-menu-items-table

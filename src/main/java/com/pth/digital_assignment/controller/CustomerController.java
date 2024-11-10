@@ -33,7 +33,7 @@ public class CustomerController {
     }
 
     @GetMapping("/profile")
-    @PreAuthorize("hasAnyAuthority('CUSTOMER')")
+    @PreAuthorize("hasRole('CUSTOMER')")
     public ResponseEntity<CustomerProfileResponse> getCustomerProfile(
             @AuthenticationPrincipal UserDetails userDetails) {
         return ResponseEntity.ok(

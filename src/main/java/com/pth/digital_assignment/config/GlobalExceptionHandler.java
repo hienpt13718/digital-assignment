@@ -61,6 +61,16 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handleGlobalException(Exception ex) {
         log.error(ex.getMessage(), ex);
+        if (ex.getCause() instanceof AuthException) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new ErrorResponse(((AuthException) ex).getErrorCode(), ex.getMessage()));
+        }
+
+        if (ex.getCause() instanceof BadRequestException) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ErrorResponse(((AuthException) ex).getErrorCode(), ex.getMessage()));
+        }
+
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(new ErrorResponse("INTERNAL_SERVER_ERROR", "An unexpected error occurred"));
     }

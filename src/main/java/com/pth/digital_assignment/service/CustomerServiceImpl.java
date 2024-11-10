@@ -39,6 +39,7 @@ public class CustomerServiceImpl implements CustomerService {
         }
 
         // Create user
+        UUID uuid = UUID.randomUUID();
         User user = User.builder()
                 .id(UUID.randomUUID())
                 .username(request.getPhone())

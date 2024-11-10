@@ -13,7 +13,7 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 
 @Mapper(componentModel = "spring"/*, uses = { UserMapper.class }*/)
 public interface CustomerMapper {
-    @Mapping(target = "id", expression = "java(java.util.UUID.randomUUID())")
+    @Mapping(target = "id", source = "user.id")
     @Mapping(target = "loyaltyScore", constant = "0")
     @Mapping(target = "user", source = "user")
     Customer toEntity(CustomerRegistrationRequest request, User user);

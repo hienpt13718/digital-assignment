@@ -44,6 +44,7 @@ public class ShopController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ShopResponse> getShop(@PathVariable Long id) {
         return ResponseEntity.ok(shopService.getShop(id));
     }
