@@ -29,7 +29,7 @@ public class ShopController {
     private final MenuItemService menuItemService;
 
     @PostMapping
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ShopResponse> createShop(@Valid @RequestBody CreateShopRequest request) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -37,7 +37,7 @@ public class ShopController {
     }
 
     @PostMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ShopResponse> updateShop(@PathVariable Long id,
                                                    @Valid @RequestBody UpdateShopRequest request) {
         return ResponseEntity.ok(shopService.updateShop(id, request));
@@ -49,6 +49,7 @@ public class ShopController {
     }
 
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Page<ShopResponse>> getAllShops(@PageableDefault(size = 20) Pageable pageable) {
         return ResponseEntity.ok(shopService.getAllShops(pageable));
     }

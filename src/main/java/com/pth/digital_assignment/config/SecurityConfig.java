@@ -1,8 +1,8 @@
 package com.pth.digital_assignment.config;
 
-import com.pth.digital_assignment.enums.UserRole;
 import com.pth.digital_assignment.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -26,8 +26,7 @@ import org.springframework.web.filter.CorsFilter;
 
 import java.util.List;
 
-import static com.pth.digital_assignment.enums.UserRole.ADMIN;
-
+@Slf4j
 @Configuration
 @RequiredArgsConstructor
 @EnableWebSecurity
@@ -44,6 +43,7 @@ public class SecurityConfig {
             "/api/v1/auth/login",
             "/api/v1/auth/register",
             "/api/v1/auth/refresh-token", // TODO
+            "/api/v1/customers/register",
     };
 
     @Bean
@@ -52,8 +52,8 @@ public class SecurityConfig {
                         .requestMatchers(WHITELIST_ENDPOINT).permitAll())
 //                .authorizeHttpRequests(authorizeRequests -> authorizeRequests.anyRequest().authenticated())
                 .authorizeHttpRequests(authorize ->
-                        authorize.requestMatchers("/api/v1/admin").hasAuthority(ADMIN.name())
-                        .anyRequest().authenticated()
+//                        authorize.requestMatchers("/api/v1/admin").hasAuthority(ADMIN.name())
+                                authorize.anyRequest().authenticated()
                 )
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -72,6 +72,8 @@ public class SecurityConfig {
         var provider = new DaoAuthenticationProvider();
         provider.setPasswordEncoder(passwordEncoder());
         provider.setUserDetailsService(userService);
+
+        log.info("admin123 {}", passwordEncoder().encode("admin123"));
 
         return provider;
     }

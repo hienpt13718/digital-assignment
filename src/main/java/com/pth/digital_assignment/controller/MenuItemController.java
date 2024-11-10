@@ -28,7 +28,7 @@ public class MenuItemController {
     private final ShopService shopService;
     private final MenuItemService menuItemService;
 
-    @GetMapping("/shop/${shopId}")
+    @GetMapping("/shop/{shopId}")
     public ResponseEntity<Page<MenuItemDTO>> getMenuItems(@PathVariable Long shopId,
                                                           @PageableDefault(size = 20) Pageable pageable) {
         return ResponseEntity.ok(
@@ -44,15 +44,14 @@ public class MenuItemController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
-    public ResponseEntity<MenuItemDTO> addMenuItem(@PathVariable Long id,
-                                                   @Valid @RequestBody CreateMenuItemRequest request) {
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<MenuItemDTO> addMenuItem(@Valid @RequestBody CreateMenuItemRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(menuItemService.createMenuItem(id, request));
+                .body(menuItemService.createMenuItem(request));
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<MenuItemDTO> updateMenuItem(@PathVariable Long id,
                                                       @Valid @RequestBody MenuItemDTO menuItemDTO) {
         MenuItemDTO updatedItem = menuItemService.updateMenuItem(id, menuItemDTO);
@@ -60,7 +59,7 @@ public class MenuItemController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteMenuItem(@PathVariable Long id) {
         menuItemService.deleteMenuItem(id);
         return ResponseEntity.noContent().build();

@@ -52,13 +52,12 @@ public class JwtAuthTokenFilter extends OncePerRequestFilter {
         }
 
         Claims jwtClaims = jwtProvider.getClaims(jwtBearerToken);
-        UserPrincipal authority = jsonMapper.convertValue(jwtClaims, UserPrincipal.class);
+        UserPrincipal principal = jsonMapper.convertValue(jwtClaims, UserPrincipal.class);
 
-        String username = authority.getIdentifier();
-        List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList(authority.getAuthorities());
+        List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList(principal.getAuthorities());
 
         UserDetails user = User.builder()
-                .username(username)
+                .username(principal.getIdentifier())
                 .password(EMPTY)
                 .authorities(authorities)
                 .build();

@@ -4,6 +4,7 @@ import com.pth.digital_assignment.dto.customer.CustomerProfileResponse;
 import com.pth.digital_assignment.dto.customer.CustomerRegistrationRequest;
 import com.pth.digital_assignment.dto.customer.UpdateCustomerProfileRequest;
 import com.pth.digital_assignment.enums.UserRole;
+import com.pth.digital_assignment.enums.UserStatus;
 import com.pth.digital_assignment.exception.ResourceDuplicatedException;
 import com.pth.digital_assignment.exception.ResourceNotFoundException;
 import com.pth.digital_assignment.mapper.CustomerMapper;
@@ -39,9 +40,11 @@ public class CustomerServiceImpl implements CustomerService {
 
         // Create user
         User user = User.builder()
+                .id(UUID.randomUUID())
                 .username(request.getPhone())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(UserRole.CUSTOMER)
+                .status(UserStatus.ACTIVE)
                 .build();
         user = userRepository.save(user);
 

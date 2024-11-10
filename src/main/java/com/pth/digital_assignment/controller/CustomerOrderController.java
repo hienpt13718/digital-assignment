@@ -32,13 +32,14 @@ public class CustomerOrderController {
     private final OrderService orderService;
 
     @PostMapping("/shops/nearby")
+    @PreAuthorize("hasRole('CUSTOMER')")
     public ResponseEntity<List<NearbyShop>> findNearbyShops(
             @Valid @RequestBody CustomerLocation location) {
         return ResponseEntity.ok(orderService.findNearbyShops(location));
     }
 
     @PostMapping("/orders")
-    @PreAuthorize("hasAnyAuthority('CUSTOMER')")
+    @PreAuthorize("hasRole('CUSTOMER')")
     public ResponseEntity<OrderStatusDto> placeOrder(
             @AuthenticationPrincipal UserDetails userDetails,
             @Valid @RequestBody CreateOrderRequest orderRequest) {
@@ -47,7 +48,7 @@ public class CustomerOrderController {
     }
 
     @GetMapping("/orders/{orderId}")
-    @PreAuthorize("hasAnyAuthority('CUSTOMER')")
+    @PreAuthorize("hasRole('CUSTOMER')")
     public ResponseEntity<OrderStatusDto> getOrderStatus(
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable Long orderId) {
@@ -56,7 +57,7 @@ public class CustomerOrderController {
     }
 
     @DeleteMapping("/orders/{orderId}")
-    @PreAuthorize("hasAnyAuthority('CUSTOMER')")
+    @PreAuthorize("hasRole('CUSTOMER')")
     public ResponseEntity<Void> cancelOrder(
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable Long orderId) {
@@ -66,7 +67,7 @@ public class CustomerOrderController {
     }
 
     @GetMapping("/orders/active")
-    @PreAuthorize("hasAnyAuthority('CUSTOMER')")
+    @PreAuthorize("hasRole('CUSTOMER')")
     public ResponseEntity<List<OrderStatusDto>> getActiveOrders(
             @AuthenticationPrincipal UserDetails userDetails) {
         UUID customerId = UUID.fromString(userDetails.getUsername());

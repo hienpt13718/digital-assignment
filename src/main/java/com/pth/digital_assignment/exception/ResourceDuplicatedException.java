@@ -18,4 +18,8 @@ public class ResourceDuplicatedException extends BadRequestException {
     public static ResourceDuplicatedException customerPhoneDuplicated() {
         return new ResourceDuplicatedException("PHONE_NO_EXISTED", "Phone number already registered");
     }
+
+    public static ResourceDuplicatedException usernameDuplicated() {
+        return new ResourceDuplicatedException("USERNAME_EXISTED", "Username already exists");
+    }
 }

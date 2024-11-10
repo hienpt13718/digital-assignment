@@ -1,12 +1,10 @@
 package com.pth.digital_assignment.config;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.pth.digital_assignment.config.properties.JwtProperties;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
@@ -16,11 +14,15 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
-import java.util.Map;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Getter
@@ -31,19 +33,27 @@ public class JwtProvider {
     private final JsonMapper jsonMapper;
     private final JwtProperties jwtProperties;
 
-    public String generateJwtToken(String subject, Object claims, Date expirationDate) {
+    public String generateToken(Authentication authentication) {
+        UserDetails userPrincipal = (UserDetails) authentication.getPrincipal();
         SecretKey key = Keys.hmacShaKeyFor(jwtProperties.getSecret().getBytes());
-        TypeReference<Map<String, Object>> toMapClz = new TypeReference<>() {};
 
-        JwtBuilder jwtBuilder = Jwts.builder()
+        Date expirationDate = jwtProperties.getExpirationFromNow();
+
+        return Jwts.builder()
+                .subject(userPrincipal.getUsername())
+                .claim("identifier", userPrincipal.getUsername())
+                .claim("authorities", userPrincipal.getAuthorities()
+                        .stream()
+                        .map(GrantedAuthority::getAuthority)
+                        .collect(Collectors.toList()))
+                .issuedAt(new Date())
                 .expiration(expirationDate)
-                .signWith(key, Jwts.SIG.HS256)
-                .claim("sub", subject);
+                .signWith(key, Jwts.SIG.HS256).compact();
+    }
 
-        jsonMapper.convertValue(claims, toMapClz)
-                .forEach(jwtBuilder::claim);
-
-        return jwtBuilder.compact();
+    public UUID getUserIdFromJWT(String token) {
+        Claims claims = getClaims(token);
+        return UUID.fromString(claims.getSubject());
     }
 
     public Claims getClaims(String token) {

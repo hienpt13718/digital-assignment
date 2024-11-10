@@ -21,13 +21,13 @@ public class QueueManagementController {
     private final QueueManagementService queueManagementService;
 
     @GetMapping("/shop/{shopId}/status")
-    @PreAuthorize("hasAnyAuthority('OPERATOR')")
+    @PreAuthorize("hasAnyRole('ADMIN','OPERATOR')")
     public ResponseEntity<QueueStatus> getQueueStatus(@PathVariable Long shopId) {
         return ResponseEntity.ok(queueManagementService.getQueueStatus(shopId));
     }
 
     @PostMapping("/shop/{shopId}/process")
-    @PreAuthorize("hasAnyAuthority('OPERATOR')")
+    @PreAuthorize("hasAnyRole('ADMIN','OPERATOR')")
     public ResponseEntity<QueueOrder> processNextOrder(
             @PathVariable Long shopId,
             @RequestParam(defaultValue = "1") int queueNumber) {
@@ -35,7 +35,7 @@ public class QueueManagementController {
     }
 
     @PutMapping("/orders/{orderId}/status")
-    @PreAuthorize("hasAnyAuthority('OPERATOR')")
+    @PreAuthorize("hasAnyRole('ADMIN','OPERATOR')")
     public ResponseEntity<Void> updateOrderStatus(
             @PathVariable Long orderId,
             @RequestParam String status) {

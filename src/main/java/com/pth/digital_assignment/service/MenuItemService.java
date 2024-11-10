@@ -6,7 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface MenuItemService {
-    MenuItemDTO createMenuItem(Long shopId, CreateMenuItemRequest request);
+    MenuItemDTO createMenuItem(CreateMenuItemRequest request);
     Page<MenuItemDTO> getMenuItemsByShopId(Long shopId, Pageable pageable);
     MenuItemDTO getMenuItemById(Long id);
     void deleteMenuItem(Long id);

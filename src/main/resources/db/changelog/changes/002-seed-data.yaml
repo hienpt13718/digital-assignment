@@ -4,14 +4,20 @@ databaseChangeLog:
       author: developer
       changes:
         - insert:
-            tableName: users
+            tableName: tbl_user
             columns:
+              - column:
+                  name: id
+                  value: c56ea2f8-41b6-4b73-8e70-f7b6a628acc3
               - column:
                   name: username
                   value: admin@coffeeshop.com
               - column:
                   name: password
-                  value: $2a$10$xn3LI/AjqicFYZFruSwve.681477XaVNaUQbr1gioaWPn4t1KsnmG  # password: admin123
+                  value: $2a$10$jKQ0ZUNe8nguHZXf/aKwxuXu74unL8MvtI2QDP0csFk5gxfFa3WkW  # password: admin123
               - column:
                   name: role
                   value: ADMIN
+              - column:
+                  name: status
+                  value: ACTIVE

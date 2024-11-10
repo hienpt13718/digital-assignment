@@ -9,6 +9,7 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.Index;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -45,4 +46,14 @@ public class User implements Serializable {
     @NotNull
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
+
+    @PrePersist
+    protected void onCreate() {
+        if (createdAt == null) {
+            this.createdAt = LocalDateTime.now();
+        }
+        if (id == null) {
+            this.id = UUID.randomUUID();
+        }
+    }
 }

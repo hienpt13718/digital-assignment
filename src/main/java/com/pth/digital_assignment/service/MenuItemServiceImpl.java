@@ -26,7 +26,8 @@ public class MenuItemServiceImpl implements MenuItemService {
 
     @Override
     @Transactional
-    public MenuItemDTO createMenuItem(Long shopId, CreateMenuItemRequest request) {
+    public MenuItemDTO createMenuItem(CreateMenuItemRequest request) {
+        Long shopId = request.getShopId();
         Shop shop = shopRepository.findById(shopId)
                 .orElseThrow(() -> ResourceNotFoundException.shopNotFound(shopId));
 

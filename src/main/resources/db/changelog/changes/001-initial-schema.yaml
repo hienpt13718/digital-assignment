@@ -39,7 +39,7 @@ databaseChangeLog:
                   defaultValueComputed: CURRENT_TIMESTAMP
 
   - changeSet:
-      id: 002-create-shops-table
+      id: 002-create-shop-table
       author: developer
       changes:
         - createTable:
@@ -106,7 +106,7 @@ databaseChangeLog:
                   constraints:
                     nullable: false
                     foreignKeyName: fk_menu_items_shop
-                    references: shops(id)
+                    references: tbl_shop(id)
               - column:
                   name: name
                   type: varchar(100)
@@ -144,7 +144,7 @@ databaseChangeLog:
                   constraints:
                     nullable: false
                     foreignKeyName: fk_customers_user
-                    references: users(id)
+                    references: tbl_user(id)
               - column:
                   name: name
                   type: varchar(100)
@@ -184,14 +184,14 @@ databaseChangeLog:
                   constraints:
                     nullable: false
                     foreignKeyName: fk_orders_customer
-                    references: customers(id)
+                    references: tbl_customer(id)
               - column:
                   name: shop_id
                   type: bigint
                   constraints:
                     nullable: false
                     foreignKeyName: fk_orders_shop
-                    references: shops(id)
+                    references: tbl_shop(id)
               - column:
                   name: status
                   type: varchar(20)
@@ -228,14 +228,14 @@ databaseChangeLog:
                   constraints:
                     nullable: false
                     foreignKeyName: fk_order_items_order
-                    references: orders(id)
+                    references: tbl_order(id)
               - column:
                   name: menu_item_id
                   type: bigint
                   constraints:
                     nullable: false
                     foreignKeyName: fk_order_items_menu_item
-                    references: menu_items(id)
+                    references: tbl_menu_item(id)
               - column:
                   name: quantity
                   type: integer
