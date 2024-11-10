@@ -1,0 +1,2 @@
+databaseChangeLog:
+  - includeAll: db/changelog/changes/

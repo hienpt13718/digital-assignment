@@ -1,0 +1,315 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001-create-users-table
+      author: developer
+      changes:
+        - createTable:
+            tableName: tbl_user
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: username
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: password
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: role
+                  type: varchar(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status
+                  type: varchar(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+
+  - changeSet:
+      id: 002-create-shops-table
+      author: developer
+      changes:
+        - createTable:
+            tableName: tbl_shop
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: address
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: phone
+                  type: varchar(20)
+              - column:
+                  name: latitude
+                  type: decimal(10,8)
+              - column:
+                  name: longitude
+                  type: decimal(11,8)
+              - column:
+                  name: max_queue_size
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: number_of_queues
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+
+  - changeSet:
+      id: 003-create-menu-items-table
+      author: developer
+      changes:
+        - createTable:
+            tableName: tbl_menu_item
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: shop_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_menu_items_shop
+                    references: shops(id)
+              - column:
+                  name: name
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: text
+              - column:
+                  name: price
+                  type: decimal(10,2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: is_available
+                  type: boolean
+                  defaultValueBoolean: true
+
+  - changeSet:
+      id: 004-create-customers-table
+      author: developer
+      changes:
+        - createTable:
+            tableName: tbl_customer
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_customers_user
+                    references: users(id)
+              - column:
+                  name: name
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: phone
+                  type: varchar(20)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: address
+                  type: varchar(255)
+              - column:
+                  name: loyalty_score
+                  type: integer
+                  defaultValueNumeric: "0"
+
+  - changeSet:
+      id: 005-create-orders-table
+      author: developer
+      changes:
+        - createTable:
+            tableName: tbl_order
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: customer_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_orders_customer
+                    references: customers(id)
+              - column:
+                  name: shop_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_orders_shop
+                    references: shops(id)
+              - column:
+                  name: status
+                  type: varchar(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: queue_number
+                  type: integer
+              - column:
+                  name: queue_position
+                  type: integer
+              - column:
+                  name: created_at
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+
+  - changeSet:
+      id: 006-create-order-items-table
+      author: developer
+      changes:
+        - createTable:
+            tableName: tbl_order_item
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: order_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_order_items_order
+                    references: orders(id)
+              - column:
+                  name: menu_item_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_order_items_menu_item
+                    references: menu_items(id)
+              - column:
+                  name: quantity
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: unit_price
+                  type: decimal(10,2)
+                  constraints:
+                    nullable: false
+
+# Create indexing
+  - changeSet:
+      id: 007-add-index-users-username
+      author: developer
+      changes:
+        - createIndex:
+            tableName: tbl_user
+            indexName: idx_tbl_user_username
+            columns:
+              - column:
+                  name: username
+
+  - changeSet:
+      id: 008-add-index-users-status
+      author: developer
+      changes:
+        - createIndex:
+            tableName: tbl_user
+            indexName: idx_tbl_user_status
+            columns:
+              - column:
+                  name: status
+
+  - changeSet:
+      id: 009-add-index-customers-phone
+      author: developer
+      changes:
+        - createIndex:
+            tableName: tbl_customer
+            indexName: idx_tbl_customer_phone
+            columns:
+              - column:
+                  name: phone
+
+  - changeSet:
+      id: 010-add-index-orders-customer-id
+      author: developer
+      changes:
+        - createIndex:
+            tableName: tbl_order
+            indexName: idx_tbl_orders_customer_id
+            columns:
+              - column:
+                  name: customer_id
+
+  - changeSet:
+      id: 011-add-index-orders-status
+      author: developer
+      changes:
+        - createIndex:
+            tableName: tbl_order
+            indexName: idx_tbl_orders_status
+            columns:
+              - column:
+                  name: status
+
+  - changeSet:
+      id: 012-add-index-orders-shop-id
+      author: developer
+      changes:
+        - createIndex:
+            tableName: tbl_order
+            indexName: idx_tbl_orders_shop_id
+            columns:
+              - column:
+                  name: shop_id

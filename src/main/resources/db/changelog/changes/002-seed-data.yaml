@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001-seed-admin-user
+      author: developer
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: username
+                  value: admin@coffeeshop.com
+              - column:
+                  name: password
+                  value: $2a$10$xn3LI/AjqicFYZFruSwve.681477XaVNaUQbr1gioaWPn4t1KsnmG  # password: admin123
+              - column:
+                  name: role
+                  value: ADMIN
