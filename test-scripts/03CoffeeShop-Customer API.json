@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "f92224ac-9401-4c70-a5d3-174fa2efb080",
-		"name": "Customer API Tests",
+		"name": "03CoffeeShop-Customer API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "34841042"
 	},
@@ -45,6 +45,53 @@
 				"body": {
 					"mode": "raw",
 					"raw": "{\n    \"name\": \"John Doe 6\",\n    \"phone\": \"6234567890\",\n    \"password\": \"password123\",\n    \"address\": \"123 Main St\"\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/customers/register",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"customers",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register Customer Fail Test",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Response contains shop details\", function () {",
+							"    const jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property(\"name\");",
+							"    pm.expect(jsonData).to.have.property(\"phone\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"password\": \"password123\",\n    \"address\": \"123 Main St\"\n}"
 				},
 				"url": {
 					"raw": "{{baseUrl}}/customers/register",
@@ -145,7 +192,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"name\": \"Jane Doe\",\n    \"phone\": \"0987654321\",\n    \"address\": \"456 Elm St\"\n}"
+					"raw": "{\n    \"name\": \"Jane Doe\",\n    \"phone\": \"7987654321\",\n    \"address\": \"456 Elm St\"\n}"
 				},
 				"url": {
 					"raw": "{{baseUrl}}/customers/profile",

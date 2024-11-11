@@ -15,6 +15,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -56,6 +57,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> handleAuthorizationDenied(AuthorizationDeniedException ex) {
         return ResponseEntity.status(HttpStatus.FORBIDDEN)
                 .body(new ErrorResponse("FORBIDDEN", "Access Denied"));
+
+
+    }@ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<?> handleResourceNotFound(NoResourceFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(new ErrorResponse("NOT_FOUND", "Resource Not Found"));
     }
 
     @ExceptionHandler(Exception.class)

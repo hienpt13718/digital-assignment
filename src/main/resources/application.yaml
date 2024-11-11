@@ -1,3 +1,5 @@
+server:
+  port: ${SERVER_PORT:8080}
 spring:
   application:
     name: The Coffee Shop
@@ -24,4 +26,4 @@ spring:
 app:
   jwt:
     secret: ${JWT_SECRET:e4dccfd4c9322d015665dc1b4081c58b18eb327b82fff7d6c8de9c60840e8a9b}
-    expiration: PT30M
+    expiration: PT24H

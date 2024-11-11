@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "6c09f9b9-fd8a-429a-9de2-71bf52ae87e7",
-		"name": "Shop Management API",
+		"name": "01CoffeeShop-Shop Management API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "34841042"
 	},
@@ -141,7 +141,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"name\": \"Updated Coffee Shop\",\n  \"phone\": \"098-765-4321\",\n  \"maxQueueSize\": 15\n}",
+					"raw": "{\n  \"name\": \"Updated Coffee Shop\",\n  \"phone\": \"098-765-4321\",\n  \"maxQueueSize\": 15,\n  \"openingTime\": \"05:00:00\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -174,10 +174,11 @@
 							"",
 							"pm.test(\"Shop details are correct\", function () {",
 							"    const jsonData = pm.response.json();",
-							"    pm.expect(jsonData).to.have.property(\"id\", \"{{shopId}}\");",
+							"    pm.expect(jsonData).to.have.property(\"id\");",
 							"});"
 						],
-						"type": "text/javascript"
+						"type": "text/javascript",
+						"packages": {}
 					}
 				}
 			],

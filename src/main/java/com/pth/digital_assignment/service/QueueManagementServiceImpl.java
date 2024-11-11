@@ -66,6 +66,7 @@ public class QueueManagementServiceImpl implements QueueManagementService {
         return status;
     }
 
+    // TODO: we have AVERAGE_PREPARATION_TIME_MINUTES = 5 minutes. So that we can have a job for check and change PROCESS to COMPLETED.
     @Override
     @Transactional
     public QueueOrder processNextOrder(Long shopId, int queueNumber) {

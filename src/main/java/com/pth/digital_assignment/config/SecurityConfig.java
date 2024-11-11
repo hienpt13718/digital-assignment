@@ -44,6 +44,7 @@ public class SecurityConfig {
             "/api/v1/auth/register",
             "/api/v1/auth/refresh-token", // TODO
             "/api/v1/customers/register",
+            "/api/v1/menu-items/**"
     };
 
     @Bean

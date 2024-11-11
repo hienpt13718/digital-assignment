@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 
 @Data
 public class CreateMenuItemRequest {
-    @NotBlank
+    @NotNull
     private Long shopId;
 
     @NotBlank(message = "Name is required")

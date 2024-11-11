@@ -49,7 +49,7 @@ public class OrderServiceImpl implements OrderService {
     private final CustomerRepository customerRepository;
     private final QueueManagementService queueManagementService;
 
-    private static final int AVERAGE_PREPARATION_TIME_MINUTES = 5;// TODO: configurable
+    private static final int AVERAGE_PREPARATION_TIME_MINUTES = 5;// TODO: should configurable
 
     @Override
     @Transactional(readOnly = true)
@@ -146,7 +146,9 @@ public class OrderServiceImpl implements OrderService {
         }
 
         Order savedOrder = orderRepository.save(order);
+
         orderItems.forEach(item -> item.setOrder(savedOrder));
+        orderItemRepository.saveAll(orderItems);
 
         return createOrderStatusDto(order, orderItems, shop);
     }

@@ -1,0 +1,258 @@
+{
+	"info": {
+		"_postman_id": "802a7062-a243-4308-90b3-033825a41e86",
+		"name": "02CoffeeShop-Menu Item API",
+		"description": "Collection for testing Menu Item Controller endpoints.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "34841042"
+	},
+	"item": [
+		{
+			"name": "Add Menu Item",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"Response contains shop details\", function () {",
+							"    const jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property(\"id\");",
+							"",
+							"    pm.environment.set(\"menuItem01\", jsonData.id);",
+							"",
+							"    let menuItemIds = pm.environment.get(\"menuItemIds\");",
+							"    if (!menuItemIds) {",
+							"        menuItemIds = [];",
+							"    } else {",
+							"        menuItemIds = JSON.parse(menuItemIds);",
+							"    }",
+							"",
+							"    menuItemIds.push(jsonData.id);",
+							"    ",
+							"    pm.environment.set(\"menuItemIds\", JSON.stringify(menuItemIds));",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{authToken}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"shopId\": {{shopId}},\n    \"name\": \"Coffee\",\n    \"description\": \"Freshly brewed coffee\",\n    \"price\": 3.99\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/menu-items",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"menu-items"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Menu Item With Customer Token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 403\", function () {",
+							"    pm.response.to.have.status(403);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{customerToken}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"shopId\": {{shopId}},\n    \"name\": \"Coffee\",\n    \"description\": \"Freshly brewed coffee\",\n    \"price\": 3.99\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/menu-items",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"menu-items"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Menu Items by Shop ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/menu-items/shop/{{shopId}}?page=0&size=20",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"menu-items",
+						"shop",
+						"{{shopId}}"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "size",
+							"value": "20"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Menu Item by ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/menu-items/{{menuItem01}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"menu-items",
+						"{{menuItem01}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Menu Item",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response contains shop details\", function () {",
+							"    const jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property(\"name\", \"Updated Coffee\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{authToken}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"shopId\": 1,\n    \"name\": \"Updated Coffee\",\n    \"description\": \"Updated description\",\n    \"price\": 4.50\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/menu-items/{{menuItem01}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"menu-items",
+						"{{menuItem01}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Menu Item",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{accessToken}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/menu-items/{{menuItem01}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"menu-items",
+						"{{menuItem01}}"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

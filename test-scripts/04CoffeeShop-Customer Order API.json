@@ -1,0 +1,221 @@
+{
+	"info": {
+		"_postman_id": "c5e43e7f-556f-452d-ab2a-73be93170c1d",
+		"name": "04CoffeeShop-Customer Order API",
+		"description": "Collection for testing Customer Order Controller endpoints.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "34841042"
+	},
+	"item": [
+		{
+			"name": "Find Nearby Shops",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response contains shop details\", function () {",
+							"    const jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.be.an(\"array\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{customerToken}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"latitude\": 40.7128,\n    \"longitude\": -74.0060,\n    \"radiusInKm\": 10\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/customer/shops/nearby",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"customer",
+						"shops",
+						"nearby"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Place Order",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"Response contains shop details\", function () {",
+							"    const jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property(\"orderId\");",
+							"    ",
+							"    pm.environment.set(\"orderId\", jsonData.orderId);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{customerToken}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"shopId\": {{shopId}},\n    \"items\": [\n        {\n            \"menuItemId\": {{menuItem01}},\n            \"quantity\": 2\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/customer/orders",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"customer",
+						"orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Order Status",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{customerToken}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/customer/orders/{{orderId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"customer",
+						"orders",
+						"{{orderId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cancel Order",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{customerToken}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/customer/orders/{{orderId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"customer",
+						"orders",
+						"{{orderId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Active Orders",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{customerToken}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/customer/orders/active",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"customer",
+						"orders",
+						"active"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=mydatabase
+      - POSTGRES_USER=myuser
+      - POSTGRES_PASSWORD=1234567
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - app-network
+  digital101app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/mydatabase
+      - SPRING_DATASOURCE_USERNAME=myuser
+      - SPRING_DATASOURCE_PASSWORD=1234567
+      # Add any other environment variables your application needs
+    depends_on:
+      - db
+    networks:
+      - app-network
+
+volumes:
+  postgres-data:
+
+networks:
+  app-network:
+    driver: bridge
