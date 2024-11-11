@@ -1,5 +1,10 @@
 ## Digital 101 Assignment - The Coffee Shop
 
+### REQUIREMENTS
+- Java >= 17
+- Postgresql 15
+- Postman for testing
+
 ### Database schema
 ```sql
 -- The user table
@@ -91,15 +96,14 @@ CREATE TABLE public.tbl_order_item (
 );
 ```
 
-### REQUIREMENTS
-- Java >= 17
-- Postgresql 15
-- Postman for testing
-
 ### Build docker image
 - Build application and package
 ```shell
 mvn clean install
+```
+Or using the following if don't have maven installed
+```shell
+./mvnw clean install
 ```
 - Build docker image
 ```shell
