@@ -23,7 +23,22 @@ spring:
     enabled: true
     change-log: classpath:db/changelog/db.changelog-master.yaml
 
+
 app:
   jwt:
     secret: ${JWT_SECRET:e4dccfd4c9322d015665dc1b4081c58b18eb327b82fff7d6c8de9c60840e8a9b}
     expiration: PT24H
+
+management:
+  metrics:
+    tags:
+      application: ${spring.application.name}
+  endpoint:
+    prometheus:
+      enabled: true
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: health,metrics,prometheus,info

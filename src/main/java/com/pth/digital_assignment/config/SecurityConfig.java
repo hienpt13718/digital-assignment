@@ -39,7 +39,7 @@ public class SecurityConfig {
     private static final String[] WHITELIST_ENDPOINT = {
             "/swagger-ui/**",
 //            "/v3/api-docs/**",
-            "/actuator/health",
+            "/actuator/**",
             "/api/v1/auth/login",
             "/api/v1/auth/register",
             "/api/v1/auth/refresh-token", // TODO

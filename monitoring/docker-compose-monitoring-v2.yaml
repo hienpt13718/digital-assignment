@@ -1,0 +1,50 @@
+version: '3.8'
+services:
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yaml:/etc/prometheus/prometheus.yaml
+      # Optionally, also store Prometheus data locally
+      - ./prometheus-data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yaml'
+      - '--storage.tsdb.path=/prometheus'
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_SECURITY_ADMIN_USER=admin
+    volumes:
+      # Store Grafana data in a local directory
+      - ./grafana-data:/var/lib/grafana
+    depends_on:
+      - prometheus
+
+# Key advantages of using bind mounts:
+# 1. Easy Data Management:
+# Easy to find and manage data
+#  ls ./grafana-data
+#  ls ./prometheus-data
+#
+#  # Easy to backup
+#  cp -r ./grafana-data ./grafana-backup
+#
+#  # Easy to clean up
+#  rm -rf ./grafana-data/*
+
+#-------
+# Create directories before starting containers
+#  mkdir -p grafana-data prometheus-data
+#
+#  # Set proper permissions
+#  chmod 777 grafana-data prometheus-data
+#
+#  # Start containers
+#  docker-compose -f docker-compose-monitoring-v2.yaml up -d

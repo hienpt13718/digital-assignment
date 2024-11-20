@@ -1,0 +1,14 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: 'java-application'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      # For Docker on Windows/macOS
+      - targets: [ 'host.docker.internal:8080' ]
+
+      # Alternative configurations (try these if host.docker.internal doesn't work):
+      # - targets: ['172.17.0.1:8080']  # Common Docker bridge network IP
+      # - targets: ['192.168.65.2:8080'] # Sometimes used on Docker Desktop

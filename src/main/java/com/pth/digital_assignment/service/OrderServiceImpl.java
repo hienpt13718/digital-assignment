@@ -24,6 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -245,9 +246,9 @@ public class OrderServiceImpl implements OrderService {
                 .collect(Collectors.toList());
         dto.setItems(itemDtos);
 
-        double totalAmount = items.stream()
-                .mapToDouble(item -> item.getQuantity() * item.getUnitPrice().doubleValue())
-                .sum();
+        BigDecimal totalAmount = items.stream()
+                .map(item -> item.getUnitPrice().multiply(BigDecimal.valueOf(item.getQuantity())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
         dto.setTotalAmount(totalAmount);
 
         // Calculate estimated wait time based on queue position

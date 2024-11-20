@@ -9,6 +9,7 @@ import com.pth.digital_assignment.model.Shop;
 import com.pth.digital_assignment.repository.ShopRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -33,6 +34,7 @@ public class ShopServiceImpl implements ShopService {
 
     @Override
     @Transactional
+//    @CacheEvict(value = "KEY", allEntries = true)
     public ShopResponse updateShop(Long id, UpdateShopRequest request) {
         Shop shop = shopRepository.findById(id)
                 .orElseThrow(() -> ResourceNotFoundException.shopNotFound(id));
